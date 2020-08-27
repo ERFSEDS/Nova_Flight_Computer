@@ -1,25 +1,5 @@
 #pragma once
-//This needs to be moved to top level header file
-#define NUMBER_OF_PYROS 3
-//A bunch of defualt defines
-
-#define DEFAULT_TWO_STAGE_ROCKET			(true)
-#define DEFAULT_SAFETY_LOCK					(true)
-#define DEFAULT_SAFETY_LOCK_VALUE			(15)
-#define DEFAULT_PYRO_CONFIG					(NONE)	
-#define DEFAULT_PYRO_VALUE					(0)
-#define DEFAULT_IGNITION_THRESHOLD			(5)
-#define DEFAULT_CUTOFF_THRESHOLD			(2)
-#define DEFAULT_PRE_LAUNCH_LOG_RATE			(0)
-#define DEFAULT_POWERED_FLIGHT_LOG_RATE		(50)
-#define DEFAULT_UNPOWERED_FLIGHT_LOG_RATE	(50)
-#define DEFAULT_DESCENT_LOG_RATE			(1)
-#define DEFAULT_ALTITUDE_DETERMINATION		(BOTH)
-#define DEFAULT_ARMING_ALTITUDE				(50)
-#define DEFAULT_DROGUE_CHUTE				(true)
-#define DEFAULT_MAIN_PYRO_CHANNEL			(0)
-#define DEFAULT_DROGUE_PYRO_CHANNEL			(1)
-
+#include "NovaHeader.hpp"
 enum PyroConfig {
 	VELOCITY_ABOVE,
 	VELOCITY_BELOW,
