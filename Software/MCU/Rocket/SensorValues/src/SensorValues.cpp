@@ -2,7 +2,6 @@
  * Description: This class is to act like a Storage class for sensor values
  * Author: Matthew Gasper
  */
-#pragma once
 #include "SensorValues.h"
 
 void SensorValues::setAcceleration(cartesian data){     acceleration = data;}
@@ -13,9 +12,10 @@ void SensorValues::setTemperature(float temp){          temperature = temp;}
 
 cartesian   SensorValues::getAcceleration(){      return acceleration;}
 cartesian   SensorValues::getAngularVelocity(){   return angularVelocity;}
-float       SensorValues::getSPressure(){         return sPressure;}
-float       SensorValues::getCPressure(){         return cPressure;}
-float       SensorValues::getTemperature(){       return temperature;}
+
+float SensorValues::getSPressure(){         return sPressure;}
+float SensorValues::getCPressure(){         return cPressure;}
+float SensorValues::getTemperature(){       return temperature;}
 
 bool SensorValues::checkPyro(int cmd){
     enum pyros{one = 1, two = 2};
