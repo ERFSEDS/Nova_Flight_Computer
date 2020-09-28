@@ -13,8 +13,10 @@ class RocketData{
         cartesian acceleration[2], angularVelocity[2]; //Raw Sensor Data
         cartesian filteredGyroAngle[2], filteredAccAngle[2];
         float cPressure, sPressure, temperature; //Raw Sensor Data
-        float cVelocity;
+        float cVelocity, angle;
         cartesian displacement; //Processed Data
+
+        void setAngle(float num);
 
     protected:
         RocketData(){}
@@ -39,4 +41,5 @@ class RocketData{
         float getSPressure();
         float getTemperature();
         float getCVelocity();
+        float getAngle();
 };

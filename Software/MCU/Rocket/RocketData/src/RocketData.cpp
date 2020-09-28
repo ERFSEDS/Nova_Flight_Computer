@@ -56,6 +56,8 @@ float RocketData::complementaryFilter(float acc, float gyro, int axis){
     filteredGyroAngle[0].dimension[axis] = 1-(a*gyro_int(axis)+(1-a)*filteredGyroAngle[1].dimension[axis]);      //High-Pass Filter (For gyroscope)
 
     compFilterAngle = filteredAccAngle[0].dimension[axis] + filteredGyroAngle[0].dimension[axis];           //Combining both filtered signals to get full signal
+    
+    if(axis == 0){ setAngle(compFilterAngle); }
 
     return compFilterAngle;
 }
@@ -66,7 +68,10 @@ cartesian RocketData::getDisplacement()     {return displacement;}
 cartesian RocketData::getAcceleration()     {return acceleration[0];}
 cartesian RocketData::getAngularVelocity()  {return angularVelocity[0];}
 
+void RocketData::setAngle(float num){ angle = num; }
+
 float RocketData::getCPressure()    {return cPressure;}
 float RocketData::getSPressure()    {return sPressure;}
 float RocketData::getTemperature()  {return temperature;}
 float RocketData::getCVelocity()    {return cVelocity;}
+float RocketData::getAngle()        {return angle;}
