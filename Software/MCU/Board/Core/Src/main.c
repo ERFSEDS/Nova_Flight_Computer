@@ -30,8 +30,8 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-#define SPI_READ 0x00
-#define SPI_WRITE 0x80
+#define SPI_READ 0x80
+#define SPI_WRITE 0x00
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -58,7 +58,7 @@ static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-HAL_StatusTypeDef SPI_Custom(uint8_t rw, uint8_t address, uint16_t * value, GPIO_TypeDef* GPIO, uint16_t pin);
+HAL_StatusTypeDef SPI_Custom(uint8_t rw, uint8_t address, uint8_t * value, GPIO_TypeDef* GPIO, uint16_t pin);
 
 /* USER CODE END PFP */
 
@@ -99,9 +99,10 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 	uint8_t reset = 0x1E;
-	HAL_GPIO_WritePin(BARO_CS_GPIO_Port, BARO_CS_Pin, GPIO_PIN_RESET);
-	HAL_SPI_Transmit(&hspi1, &reset, 1, 1000);
-	HAL_GPIO_WritePin(BARO_CS_GPIO_Port, BARO_CS_Pin, GPIO_PIN_SET);
+	uint8_t val = 0xB6;
+  	SPI_Custom(SPI_READ, reset, &val, IMU_ACCEL_CS_GPIO_Port, IMU_ACCEL_CS_Pin);
+  	SPI_Custom(SPI_READ, reset, &val, IMU_ACCEL_CS_GPIO_Port, IMU_ACCEL_CS_Pin);
+
 
 	char msg[20]  = "                    ";
 	char msg1[20] = "                    ";
@@ -115,11 +116,11 @@ int main(void)
   while (1)
   {
     /* USER CODE BEGIN 3 */
-		uint8_t whoAmIaddr = 0xA0;
+		uint8_t whoAmIaddr = 0x00;
 		uint16_t whoami = 0;
-	  	SPI_Custom(SPI_READ, whoAmIaddr, &whoami, BARO_CS_GPIO_Port, BARO_CS_Pin);
+	  	SPI_Custom(SPI_READ, whoAmIaddr, &whoami, IMU_ACCEL_CS_GPIO_Port, IMU_ACCEL_CS_Pin);
 
-		sprintf(msg3, "PROM0 : %d\n\r", (int)whoami);
+		sprintf(msg3, "ID : %d\n\r", (int)whoami);
 		HAL_UART_Transmit(&huart2, msg3, 20, 1);
 
 		//uint16_t acceleration;
@@ -315,21 +316,19 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-HAL_StatusTypeDef SPI_Custom(uint8_t rw, uint8_t address, uint16_t * value, GPIO_TypeDef* GPIO, uint16_t pin) {
+HAL_StatusTypeDef SPI_Custom(uint8_t rw, uint8_t address, uint8_t * value, GPIO_TypeDef* GPIO, uint16_t pin) {
 	HAL_GPIO_WritePin(GPIO, pin, GPIO_PIN_RESET);
-	//address |= rw ;
+	address |= rw ;
 	//address &= 0xBF;
 	HAL_StatusTypeDef val;
 	if(rw == SPI_READ) {
 		//uint8_t dummy = 0x00;
 		//val = HAL_SPI_Transmit(&hspi1, &address, 1, 1000);
-		HAL_Delay(10);
-		uint8_t vals[2];
-		//val = HAL_SPI_Transmit(&hspi1, &dummy, 1, 1000);
-		//val = HAL_SPI_Receive(&hspi1, &vals, 3, 1000);
 
-		val = HAL_SPI_TransmitReceive(&hspi1, &address, vals, 4, 1000);
-		*value = (vals[1] << 8) + vals[0];
+		uint8_t vals[2];
+
+		val = HAL_SPI_TransmitReceive(&hspi1, &address, vals, 3, 1000);
+		*value = vals[1];
 	}
 	else {
 		uint16_t data = (address << 8) + *value;
